@@ -1,4 +1,4 @@
-### Theia
+# Theia
 State Of The Art Computer Vision Exam Proctoring System , Made using YoloV5 and Dlib 
 
 <details>
@@ -6,7 +6,7 @@ State Of The Art Computer Vision Exam Proctoring System , Made using YoloV5 and 
    
 Introducing a cutting-edge computer vision-based exam proctoring system, meticulously crafted using YoloV5 and Dlib technologies. This software is designed to uphold the integrity of exams conducted on computer screens by detecting and preventing suspicious activities committed by candidates. It relies on the candidate's webcam to monitor and analyze their behavior during the exam.
 
-# Key Features:
+### Key Features:
 
 1. Violation Counter: This system maintains a violation counter that allows a predefined number of infractions within an adjustable limit. Once this limit is reached, an alert is immediately sent to the administrator, and the candidate's computer is rendered inoperable until further action is taken.
 
