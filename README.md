@@ -4,7 +4,7 @@ State Of The Art Computer Vision Exam Proctoring System , Made using YoloV5 and 
 <details>
 <summary>Features</summary>
    
-Introducing a cutting-edge computer vision-based exam proctoring system, meticulously crafted using YoloV5 and Dlib technologies. This software is designed to uphold the integrity of exams conducted on computer screens by detecting and preventing suspicious activities committed by candidates. It relies on the candidate's webcam to monitor and analyze their behavior during the exam.
+This software is designed to uphold the integrity of exams conducted on computer screens by detecting and preventing suspicious activities committed by candidates. It relies on the candidate's webcam to monitor and analyze their behavior during the exam.
 
 ### Key Features:
 
