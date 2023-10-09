@@ -58,13 +58,16 @@ These steps will set up and launch the software, allowing you to use it for moni
 1. **Violation Detection:** The software monitors and captures several types of violations during exams, including:
 
    a. Prolonged Absence of a Detected Face.
+   
    b. Detection of More Than One Face.
+   
    c. Detection of a Mobile Phone.
+   
    d. Candidate Looking Away from the Screen.
 
-2. **Violation Counter:** Each violation observed results in the addition of one point to the Violation Counter. Once this counter reaches a predefined limit (default set to 15), the software triggers an unskippable alert message: "Suspicious activity detected! Admin Alerted." To dismiss this message, simply close the terminal window running the program.
+3. **Violation Counter:** Each violation observed results in the addition of one point to the Violation Counter. Once this counter reaches a predefined limit (default set to 15), the software triggers an unskippable alert message: "Suspicious activity detected! Admin Alerted." To dismiss this message, simply close the terminal window running the program.
 
-3. **Customizable Violation Limit:** Administrators have the flexibility to adjust the maximum limit of violations to suit their specific requirements. This setting is conveniently located within the early lines of the 'webcam.py' file, clearly commented for ease of customization.
+4. **Customizable Violation Limit:** Administrators have the flexibility to adjust the maximum limit of violations to suit their specific requirements. This setting is conveniently located within the early lines of the 'webcam.py' file, clearly commented for ease of customization.
 
 ### Webcam Configuration:
 
