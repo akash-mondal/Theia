@@ -4,7 +4,9 @@ import mediapipe as mp
 import numpy as np
 import time
 import os
-
+############## LIMIT OF VIOLATIONS TOLERATED #######################################################
+max_violations=15 # Change this value to adjust the tolerance , every violation is counted as +1 , after this set limit is reached a consistent ALERT window will appear
+####################################################################################################
 # Load YOLOv5 model with your specific weights
 model = torch.hub.load('ultralytics/yolov5', 'custom', device='cpu', path='proctor.pt')
 
@@ -85,6 +87,77 @@ log = []
 # Initialize variables for the extra person violation
 extra_person_counter = 1
 extra_person_start_time = None
+# Initialize the violation_counter value
+violation_counter = 0
+# Initialize variables for the No person violation
+last_person_detected_time = time.time()
+no_person_counter = 1
+def update_violation_counter_window():
+    # Create a black background image
+    counter_image = np.zeros((100, 200, 3), dtype=np.uint8)
+    
+    # Define the font and text settings
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    font_scale = 2
+    font_color = (255, 255, 255)  # White color
+    font_thickness = 3
+    text = f"{violation_counter}"
+    
+    # Calculate text size and position
+    text_size, _ = cv2.getTextSize(text, font, font_scale, font_thickness)
+    text_x = (counter_image.shape[1] - text_size[0]) // 2
+    text_y = (counter_image.shape[0] + text_size[1]) // 2
+    
+    # Display the violation counter value on the image
+    cv2.putText(counter_image, text, (text_x, text_y), font, font_scale, font_color, font_thickness)
+    
+    # Show the window
+    cv2.imshow('Violation Counter', counter_image)
+
+    if violation_counter >= max_violations:
+        alert_message = "Suspicious Activity Detected, Admin Has Been Alerted!"
+    
+        # Determine the text size and position based on the message length
+        alert_font = cv2.FONT_HERSHEY_SIMPLEX
+        alert_font_scale = 0.5
+        alert_font_color = (0, 0, 255)  # Red color
+        alert_font_thickness = 1
+    
+        alert_text_size, _ = cv2.getTextSize(alert_message, alert_font, alert_font_scale, alert_font_thickness)
+    
+        # Define the alert window size based on the text size
+        alert_window_width = alert_text_size[0] + 20
+        alert_window_height = alert_text_size[1] + 20
+    
+        # Create a new window for the alert message
+        cv2.namedWindow('Suspicious Activity Alert', cv2.WINDOW_NORMAL)
+        cv2.resizeWindow('Suspicious Activity Alert', alert_window_width, alert_window_height)
+    
+        # Calculate text position centered within the window
+        alert_text_x = (alert_window_width - alert_text_size[0]) // 2
+        alert_text_y = (alert_window_height - alert_text_size[1]) // 2
+    
+        # Create a black background for the alert message
+        alert_image = np.zeros((alert_window_height, alert_window_width, 3), dtype=np.uint8)
+    
+        # Display the alert message on the window
+        cv2.putText(alert_image, alert_message, (alert_text_x, alert_text_y), alert_font, alert_font_scale, alert_font_color, alert_font_thickness)
+    
+        # Show the alert window
+        cv2.imshow('Suspicious Activity Alert', alert_image)
+    
+        # Wait for a key press to close the alert window
+        cv2.waitKey(0)
+    
+        # Close the alert window
+        cv2.destroyWindow('Suspicious Activity Alert')
+
+    
+    cv2.waitKey(1)
+
+# Create the violation counter window
+cv2.namedWindow('Violation Counter', cv2.WINDOW_NORMAL)
+cv2.resizeWindow('Violation Counter', 200, 200)
 
 while True:
     ret, frame = cap.read()
@@ -141,12 +214,36 @@ while True:
                 image_filename = f"{output_directory}/ViolationExtraPerson{extra_person_counter}.png"
                 cv2.imwrite(image_filename, frame)
                 print(f"Captured image: {image_filename}")
+                violation_counter += 1
                 extra_person_counter += 1
                 extra_person_start_time = None
 
                 # Reflect extra person violation in YOLOv5 object detection window
                 cv2.putText(frame, "Extra Person Violation Detected!", (10, 190), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
     cv2.putText(frame, log_message, (20, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 1)
+    
+    
+    # Check for No person violation
+    if person_counter > 0:
+        # Update the last_person_detected_time when a person is detected
+        last_person_detected_time = time.time()
+    else:
+        # Calculate the time difference
+        time_since_last_person = time.time() - last_person_detected_time
+    
+        # Check if the time difference exceeds 30 seconds
+        if time_since_last_person >= 30:
+            # Capture and store the image for "No Person Detected" violation
+            capture_time = time.strftime("%Y%m%d%H%M%S")
+            image_filename = f"{output_directory}/ViolationNoPersonDetected{no_person_counter}.png"
+            cv2.imwrite(image_filename, frame)
+            print(f"Captured image: {image_filename}")
+            violation_counter += 1
+            no_person_counter += 1
+            last_person_detected_time = time.time()  # Reset the timer
+            # Update the violation counter window
+            update_violation_counter_window()
+
     cv2.imshow('YOLOv5 Object Detection', frame)
 
     success, img= cap.read()
@@ -307,6 +404,7 @@ while True:
                     image_filename = f"{output_directory}/ViolationPeeking{peeking_counter}.png"
                     cv2.imwrite(image_filename, img)
                     print(f"Captured image: {image_filename}")
+                    violation_counter += 1
                     peeking_counter += 1
                     start_time = None
                     
@@ -337,6 +435,7 @@ while True:
                     image_filename = f"{output_directory}/ViolationMobilePhone{mobile_phone_counter}.png"
                     cv2.imwrite(image_filename, img)
                     print(f"Captured image: {image_filename}")
+                    violation_counter += 1
                     mobile_phone_counter += 1
                     start_mobile_time = None
                     
@@ -353,6 +452,11 @@ while True:
     if cv2.waitKey(5) & 0xFF == ord('q'):
         break
 
+    update_violation_counter_window()
+    
+    # Check for user input to exit the loop
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
 # Release the webcam and close all windows
 cap.release()
 cv2.destroyAllWindows()
