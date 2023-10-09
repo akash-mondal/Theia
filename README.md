@@ -28,7 +28,7 @@ In summary, our state-of-the-art computer vision-based exam proctoring system pr
 <summary>Installation</summary>
 This software is designed to operate efficiently without the need for a GPU, relying solely on CPU resources. Therefore, it is essential to ensure that your system is equipped with a capable CPU.
 
-To get started with the installation process, follow these steps:
+### To get started with the installation process, follow these steps:
 
 1. Begin by installing Python 3, which can be downloaded from the official Python website at https://www.python.org
 
