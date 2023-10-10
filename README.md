@@ -1,5 +1,5 @@
 # Theia
-State Of The Art Computer Vision Exam Proctoring System , Made using YoloV5 and Dlib 
+State Of The Art Computer Vision Exam Proctoring System , Made using YoloV5 and Mediapipe
 
 <details>
 <summary>Features</summary>
