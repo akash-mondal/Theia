@@ -30,7 +30,7 @@ This software is designed to operate efficiently without the need for a GPU, rel
 
 ### Installation process:
 
-1. Begin by installing Python 3, which can be downloaded from the official Python website at https://www.python.org
+1. Begin by installing Python 3 (This Software Only Supports Python 3.8 - 3.11) , which can be downloaded from the official Python website.
 
 2. Next, either clone the repository or download it as a ZIP file to your local machine.
 
