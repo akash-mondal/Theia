@@ -2,7 +2,11 @@
 State Of The Art Computer Vision Exam Proctoring System , Made using YoloV5 and Mediapipe
 
 
-https://github.com/akash-mondal/Theia/assets/96812236/9cd98233-cd84-44ff-8bf3-f31e7c29c1b2
+
+
+https://github.com/akash-mondal/Theia/assets/96812236/882dc315-afba-4601-abbb-e3be92f21603
+
+
 
 
 <details>
